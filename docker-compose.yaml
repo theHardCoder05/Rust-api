@@ -1,36 +1,40 @@
 version: "3.9"
-services:
-  postgres:
-    image: postgres:14-alpine
-    environment:
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=secret
-      - POSTGRES_DB=rustdb
-  api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "8000:8000"
-    environment:
-      - DB_SOURCE=postgresql://root:secret@postgres:5432/simple_bank?sslmode=disable
-    depends_on:
-      - postgres
-    entrypoint:
-      [
-        "/app/wait-for.sh",
-        "postgres:5432",
-        "--",
-        "/app/start.sh"
-      ]
-    command: [ "/app/main" ]
 
-  adminer:
-    container_name: local_adminer
-    image: adminer
+services:
+
+  postgresdb:
+      container_name: postgresdb
+      image: "postgres:13.3"
+
+      environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=1234
+        - POSTGRES_DB=rustdb
+      volumes:
+        - rust_api_data:/var/lib/postgresql/data
+      ports:
+        - "5432:5432"
+      networks:
+        - rust-local-network
+
+
+  rust_backend:
+    container_name: rust_backend
+    image: rust-api:1.0.0
+    build: .
     ports:
-      - "5555:8080"
+      - 8000:8000
     environment:
-      - ADMINER_DESIGN=mvt
-    logging:
-      driver: "none"
+      - DATABASE_URL=postgresql://postgres:1234@postgresdb:5432/rustdb?sslmode=disable
+      - RUST_BACKTRACE=full
+    depends_on:
+      - postgresdb
+    networks:
+        - rust-local-network
+  
+  
+networks:
+  rust-local-network:
+    driver: bridge
+volumes:
+  rust_api_data: {}

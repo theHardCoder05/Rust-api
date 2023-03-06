@@ -1,0 +1,80 @@
+{
+  "db": "PostgreSQL",
+  "1dd7a94ae1e7a8c06e879bde967897d68d44663ffd86c950ea4693344780f9b6": {
+    "describe": {
+      "columns": [
+        {
+          "name": "answer_uuid",
+          "ordinal": 0,
+          "type_info": "Uuid"
+        },
+        {
+          "name": "question_uuid",
+          "ordinal": 1,
+          "type_info": "Uuid"
+        },
+        {
+          "name": "content",
+          "ordinal": 2,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "created_at",
+          "ordinal": 3,
+          "type_info": "Timestamp"
+        }
+      ],
+      "nullable": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "parameters": {
+        "Left": [
+          "Uuid"
+        ]
+      }
+    },
+    "query": "SELECT * FROM answers WHERE question_uuid = $1"
+  },
+  "8e66b51548e58dfc05c103c8d7df9864bde4d4b9e680916a38ec291aabf81de4": {
+    "describe": {
+      "columns": [
+        {
+          "name": "answer_uuid",
+          "ordinal": 0,
+          "type_info": "Uuid"
+        },
+        {
+          "name": "question_uuid",
+          "ordinal": 1,
+          "type_info": "Uuid"
+        },
+        {
+          "name": "content",
+          "ordinal": 2,
+          "type_info": "Varchar"
+        },
+        {
+          "name": "created_at",
+          "ordinal": 3,
+          "type_info": "Timestamp"
+        }
+      ],
+      "nullable": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "parameters": {
+        "Left": [
+          "Uuid",
+          "Varchar"
+        ]
+      }
+    },
+    "query": "\n                INSERT INTO answers ( question_uuid, content )\n                VALUES ( $1, $2 )\n                RETURNING *\n            "
+  }
+}

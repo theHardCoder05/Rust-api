@@ -1,4 +1,4 @@
-DB_URL=postgresql://root:secret@localhost:5432/rustdb?sslmode=disable
+DB_URL=postgresql://postgres12:1234@localhost:5432/rustdb?sslmode=disable
 
 network:
 	docker network create rust-network

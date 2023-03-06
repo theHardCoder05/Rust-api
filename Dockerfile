@@ -1,17 +1,13 @@
-# Use a base image with Rust and the required libraries installed
-FROM rust:latest
 
-# Set the working directory in the container
+FROM rust as builder
 WORKDIR /app
-
-# Copy the source code to the container
 COPY . .
-
-# Build the application in release mode
+ENV SQLX_OFFLINE=true
 RUN cargo build --release
 
-# Set the environment variables for the application
-ENV ROCKET_ENV=prod
-
-# Run the application
-CMD ["./target/release/rust_api"]
+FROM rust as runtime
+WORKDIR /app
+COPY --from=builder /app/target/release/rest_api .
+COPY --from=builder /app/Rocket.toml .
+EXPOSE 8000
+CMD ["./rest_api"]
