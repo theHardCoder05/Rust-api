@@ -14,8 +14,8 @@ services:
         - rust_api_data:/var/lib/postgresql/data
       ports:
         - "5432:5432"
-      networks:
-        - rust-local-network
+      # networks:
+      #   - rust-local-network
 
 
   rust_backend:
@@ -29,8 +29,8 @@ services:
       - RUST_BACKTRACE=full
     depends_on:
       - postgresdb
-    networks:
-        - rust-local-network
+    # networks:
+    #     - rust-local-network
   
   
 networks:
